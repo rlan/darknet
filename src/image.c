@@ -235,7 +235,7 @@ image **load_alphabet()
     return alphabets;
 }
 
-void draw_detections(image im, int num, float thresh, box *boxes, float **probs, float **masks, char **names, image **alphabet, int classes)
+void draw_detections(image im, int num, float thresh, box *boxes, float **probs, float **masks, char **names, image **alphabet, int classes, char *input)
 {
     int i;
 
@@ -243,7 +243,9 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
         int class = max_index(probs[i], classes);
         float prob = probs[i][class];
         if(prob > thresh){
-            int width = im.h * .006;
+            int width = im.h * .003; //original .006;
+            //int width = pow(prob, 0.5)*10+1;
+            //int width;
 
             if(0){
                 width = pow(prob, 1./2.)*10+1;
@@ -251,7 +253,7 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             }
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
-            printf("%s: %.0f%%\n", names[class], prob*100);
+            //printf("%s: %.0f%%\n", names[class], prob*100);
             int offset = class*123457 % classes;
             float red = get_color(2,offset,classes);
             float green = get_color(1,offset,classes);
@@ -275,9 +277,15 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             if(top < 0) top = 0;
             if(bot > im.h-1) bot = im.h-1;
 
+            printf("==%s %s %f %i %i %i %i\n", names[class], input, prob, left, top, right, bot); // rick debug
             draw_box_width(im, left, top, right, bot, width, red, green, blue);
             if (alphabet) {
-                image label = get_label(alphabet, names[class], (im.h*.03)/10);
+                char str[1024];
+                //sprintf(str, "%s %.0f%%", names[class], prob*100);
+                sprintf(str, "%.0f%%", prob*100);
+                //printf("%s\n", str);
+                //image label = get_label(alphabet, names[class], (im.h*.03)/10);
+                image label = get_label(alphabet, str,          (im.h*.01)/10);
                 draw_label(im, top + width, left, label, rgb);
                 free_image(label);
             }
@@ -557,7 +565,8 @@ void ipl_into_image(IplImage* src, image im)
     for(i = 0; i < h; ++i){
         for(k= 0; k < c; ++k){
             for(j = 0; j < w; ++j){
-                im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
+                //im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
+                im.data[k*w*h + i*w + j] = (data[i*step + j*c + k]-128)/128.; // rick
             }
         }
     }

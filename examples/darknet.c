@@ -411,8 +411,30 @@ void visualize(char *cfgfile, char *weightfile)
 #endif
 }
 
+void reportTime(void)
+{
+    time_t rawtime;
+    struct tm *info;
+    char time_buf[128];
+    time(&rawtime);
+    info = localtime(&rawtime);
+    strftime(time_buf, 128, "%x - %I:%M%p", info);
+    printf("\nNOW [%s]\n", time_buf);
+}
+
+void showArguments(int argc, char **argv)
+{
+    printf("Arguments:\n");
+    for (int i = 0; i < argc; i++) {
+        printf("%s\n", argv[i]);
+    }
+}
+
 int main(int argc, char **argv)
 {
+    reportTime();
+    showArguments(argc, argv);
+
     //test_resize("data/bad.jpg");
     //test_box();
     //test_convolutional_layer();
@@ -520,6 +542,8 @@ int main(int argc, char **argv)
     } else {
         fprintf(stderr, "Not an option: %s\n", argv[1]);
     }
+
+    reportTime();
     return 0;
 }
 
