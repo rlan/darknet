@@ -25,3 +25,8 @@ ehthumbs.db
 Icon?
 Thumbs.db
 *.swp
+
+# Working files
+.vscode
+backup*/
+log*.txt
