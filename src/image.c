@@ -240,17 +240,38 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
     int i;
 
     for(i = 0; i < num; ++i){
-        int class = max_index(probs[i], classes);
-        float prob = probs[i][class];
-        if(prob > thresh){
-            int width = im.h * .003; //original .006;
-            //int width = pow(prob, 0.5)*10+1;
-            //int width;
-
-            if(0){
-                width = pow(prob, 1./2.)*10+1;
-                alphabet = 0;
+        char labelstr[4096] = {0};
+        int class = -1;
+        float highest_probs;
+        int highest_class = -1;
+        for(j = 0; j < classes; ++j){
+            if (probs[i][j] > thresh){
+                if (class < 0) {
+                    strcat(labelstr, names[j]);
+                    class = j;
+                } else {
+                    strcat(labelstr, ", ");
+                    strcat(labelstr, names[j]);
+                }
+                printf("%s: %.0f%%\n", names[j], probs[i][j]*100);
+                if (highest_class < 0) {
+                    highest_probs = probs[i][j]*100;
+                    highest_class = j;
+                } else if (probs[i][j] > highest_probs) {
+                    highest_probs = probs[i][j];
+                    highest_class = j;
+                }
             }
+        }
+        if (class >= 0) {
+            int width = im.h * .003; // original .006;
+
+            /*
+               if(0){
+               width = pow(prob, 1./2.)*10+1;
+               alphabet = 0;
+               }
+             */
 
             //printf("%d %s: %.0f%%\n", i, names[class], prob*100);
             //printf("%s: %.0f%%\n", names[class], prob*100);
@@ -277,7 +298,7 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             if(top < 0) top = 0;
             if(bot > im.h-1) bot = im.h-1;
 
-            printf("==%s %s %f %i %i %i %i\n", names[class], input, prob, left, top, right, bot); // rick debug
+            printf("==%s %s %f %i %i %i %i\n", names[highest_class], input, probs[i][highest_class], left, top, right, bot); // rick debug
             draw_box_width(im, left, top, right, bot, width, red, green, blue);
             if (alphabet) {
                 char str[1024];
