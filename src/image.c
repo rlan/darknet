@@ -301,6 +301,7 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             printf("==%s %s %f %i %i %i %i\n", names[highest_class], input, probs[i][highest_class], left, top, right, bot); // rick debug
             draw_box_width(im, left, top, right, bot, width, red, green, blue);
             if (alphabet) {
+                sprintf(labelstr, "%.0f%%\n", probs[i][highest_class]*100);
                 image label = get_label(alphabet, labelstr, (im.h*.01)/10); // original (im.h*.03)/10
                 draw_label(im, top + width, left, label, rgb);
                 free_image(label);
