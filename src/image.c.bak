@@ -242,6 +242,8 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
     for(i = 0; i < num; ++i){
         char labelstr[4096] = {0};
         int class = -1;
+        float highest_probs;
+        int highest_class = -1;
         for(j = 0; j < classes; ++j){
             if (probs[i][j] > thresh){
                 if (class < 0) {
@@ -252,6 +254,13 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
                     strcat(labelstr, names[j]);
                 }
                 printf("%s: %.0f%%\n", names[j], probs[i][j]*100);
+                if (highest_class < 0) {
+                    highest_probs = probs[i][j]*100;
+                    highest_class = j;
+                } else if (probs[i][j] > highest_probs) {
+                    highest_probs = probs[i][j];
+                    highest_class = j;
+                }
             }
         }
         if(class >= 0){
@@ -289,6 +298,7 @@ void draw_detections(image im, int num, float thresh, box *boxes, float **probs,
             if(top < 0) top = 0;
             if(bot > im.h-1) bot = im.h-1;
 
+            printf("==%s %s %f %i %i %i %i\n", names[highest_class], input, probs[i][highest_class], left, top, right, bot); // rick debug
             draw_box_width(im, left, top, right, bot, width, red, green, blue);
             if (alphabet) {
                 image label = get_label(alphabet, labelstr, (im.h*.01)/10); // original (im.h*.03)/10
