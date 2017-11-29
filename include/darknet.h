@@ -661,6 +661,7 @@ image threshold_image(image im, float thresh);
 image mask_to_rgb(image mask);
 int resize_network(network *net, int w, int h);
 void free_matrix(matrix m);
+void test_distort_image(char *filename);
 void test_resize(char *filename);
 void save_image(image p, const char *name);
 void show_image(image p, const char *name);

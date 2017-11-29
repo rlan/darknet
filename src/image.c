@@ -1370,6 +1370,34 @@ image resize_image(image im, int w, int h)
     return resized;
 }
 
+void test_distort_image(char *filename)
+{
+    image im = load_image(filename, 0,0, 3);
+    float mag = mag_array(im.data, im.w*im.h*im.c);
+    printf("L2 Norm: %f\n", mag);
+    image gray = grayscale_image(im);
+
+    image c1 = copy_image(im);
+    image c2 = copy_image(im);
+    image c3 = copy_image(im);
+    image c4 = copy_image(im);
+    image c5 = copy_image(im);
+    image c6 = copy_image(im);
+    distort_image(c1, .1, 1.5, 1.5);
+    distort_image(c2, -.1, .66666, .66666);
+    distort_image(c3, .1, 1.5, .66666);
+    distort_image(c4, .1, .66666, 1.5);
+    distort_image(c5, 0, 1.0, .66666);
+    distort_image(c6, 0, 1.0, 1.5);
+
+    save_image(c1, "c1");
+    save_image(c2, "c2");
+    save_image(c3, "c3");
+    save_image(c4, "c4");
+    save_image(c5, "c5");
+    save_image(c6, "c6");
+}
+
 
 void test_resize(char *filename)
 {
