@@ -962,15 +962,14 @@ data load_data_detection(int n, char **paths, int m, int w, int h, int boxes, in
         float dh = jitter * orig.h;
 
         float new_ar = (orig.w + rand_uniform(-dw, dw)) / (orig.h + rand_uniform(-dh, dh));
-        float scale = rand_uniform(.25, 2);
 
         float nw, nh;
 
         if(new_ar < 1){
-            nh = scale * h;
+            nh = h;
             nw = nh * new_ar;
         } else {
-            nw = scale * w;
+            nw = w;
             nh = nw / new_ar;
         }
 
