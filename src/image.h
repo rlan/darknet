@@ -39,6 +39,7 @@ void place_image(image im, int w, int h, int dx, int dy, image canvas);
 void saturate_image(image im, float sat);
 void exposure_image(image im, float sat);
 void distort_image(image im, float hue, float sat, float val);
+void distort_image_hsv(image im, float hue, float sat, float val);
 void saturate_exposure_image(image im, float sat, float exposure);
 void rgb_to_hsv(image im);
 void hsv_to_rgb(image im);
