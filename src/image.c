@@ -1309,12 +1309,33 @@ void distort_image(image im, float hue, float sat, float val)
     constrain_image(im);
 }
 
+void distort_image_hsv(image im, float hue, float sat, float val)
+{
+    rgb_to_hsv(im);
+    scale_image_channel(im, 1, sat);
+    scale_image_channel(im, 2, val);
+    int i;
+    for(i = 0; i < im.w*im.h; ++i){
+        im.data[i] = im.data[i] + hue;
+        if (im.data[i] > 1) im.data[i] -= 1;
+        if (im.data[i] < 0) im.data[i] += 1;
+    }
+}
+
 void random_distort_image(image im, float hue, float saturation, float exposure)
 {
     float dhue = rand_uniform(-hue, hue);
     float dsat = rand_scale(saturation);
     float dexp = rand_scale(exposure);
     distort_image(im, dhue, dsat, dexp);
+}
+
+void random_distort_image_hsv(image im, float hue, float saturation, float exposure)
+{
+    float dhue = rand_uniform(-hue, hue);
+    float dsat = rand_scale(saturation);
+    float dexp = rand_scale(exposure);
+    distort_image_hsv(im, dhue, dsat, dexp);
 }
 
 void saturate_exposure_image(image im, float sat, float exposure)

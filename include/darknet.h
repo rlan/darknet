@@ -679,6 +679,7 @@ image float_to_image(int w, int h, int c, float *data);
 void ghost_image(image source, image dest, int dx, int dy);
 float network_accuracy(network net, data d);
 void random_distort_image(image im, float hue, float saturation, float exposure);
+void random_distort_image_hsv(image im, float hue, float saturation, float exposure);
 void fill_image(image m, float s);
 image grayscale_image(image im);
 void rotate_image_cw(image im, int times);
