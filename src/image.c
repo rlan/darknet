@@ -582,8 +582,8 @@ void ipl_into_image(IplImage* src, image im)
     for(i = 0; i < h; ++i){
         for(k= 0; k < c; ++k){
             for(j = 0; j < w; ++j){
-                //im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
-                im.data[k*w*h + i*w + j] = (data[i*step + j*c + k]-128)/128.; // rick
+                im.data[k*w*h + i*w + j] = data[i*step + j*c + k]/255.;
+                //im.data[k*w*h + i*w + j] = (data[i*step + j*c + k]-128)/128.; // [-1, 1)
             }
         }
     }
